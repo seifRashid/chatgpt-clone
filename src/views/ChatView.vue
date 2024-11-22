@@ -9,6 +9,7 @@ const apiKey = import.meta.env.VITE_GOOGLE_AI_API_KEY
 const genAI = new GoogleGenerativeAI(apiKey)
 const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
 
+
 const chat = model.startChat({
   history: [
     {
@@ -17,14 +18,14 @@ const chat = model.startChat({
     },
     {
       role: 'model',
-      parts: [{ text: 'Great to meet you. What would you like to know?' }],
+      parts: [{ text: 'Great to meet you 😇. What would you like to know?' }],
     },
   ],
 })
 
 const userInput = ref('')
 const conversation = reactive([
-  { role: 'model', text: 'Great to meet you. What would you like to know?' },
+  { role: 'model', text: 'Great to meet you 😇. What would you like to know?' },
 ])
 const isLoading = ref(false)
 
@@ -48,15 +49,29 @@ const sendMessage = async () => {
     isLoading.value = false
   }
 }
+
+const showAlert= async ()=> {
+  // userInput.value = 'suprise me'
+  try {
+    const result = await chat.sendMessage('provide me with a short suprise for this user')
+    conversation.push({ role: 'model', text: DOMPurify.sanitize(marked(result.response.text())) })
+  } catch (error) {
+    conversation.push({ role: 'model', text: 'Oops! Something went wrong. Please try again.' }, error)
+  } finally {
+    isLoading.value = false
+  }
+    }
+
+
 </script>
 
 <template>
   <main class="bg-gray-100 min-h-screen flex flex-col items-center justify-between p-4">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">AI Chat Assistant</h1>
-
     <div
-      class="w-full max-w-2xl bg-white rounded-lg shadow-lg p-4 space-y-4 overflow-y-auto"
+    class="w-full max-w-2xl bg-white rounded-lg shadow-lg p-4 space-y-4 overflow-y-auto overflow-x-auto"
     >
+    <button class="text-blue-800 bg-blue-200 p-1 rounded-md font-semibold shadow-sm hover:bg-blue-300" @click="showAlert" >Suprise me✨</button>
       <template v-for="(message, index) in conversation" :key="index">
         <div
           v-if="message.role === 'user'"
@@ -75,7 +90,7 @@ const sendMessage = async () => {
       <div v-if="isLoading" class="text-gray-500 italic animate-pulse">Thinking...</div>
     </div>
 
-    <div class="w-full max-w-2xl mt-4 flex space-x-4 sticky bottom-0">
+    <div class="w-full max-w-2xl mt-4 flex space-x-4 sticky bottom-1">
       <input
         v-model="userInput"
         type="text"
