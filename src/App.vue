@@ -13,6 +13,7 @@ import { RouterLink, RouterView } from 'vue-router'
             <div class="flex gap-4 mr-8 font-semibold">
               <RouterLink to="/">Home</RouterLink>
               <RouterLink to="/about">About</RouterLink>
+              <RouterLink to="/chat">Chat with AI</RouterLink>
             </div>
           </nav>
         </div>

@@ -58,7 +58,7 @@ generateResponse(prompt)
   <main>
     <!-- AI Chat Output Placeholder -->
     <div class="m-2">
-      <h1 class="text-2xl font-semibold text-center">How can I help you😇?</h1>
+      <h1 class="text-2xl font-semibold text-center my-2">How can I help you😇?</h1>
       <div class="flex items-center justify-between">
         <input
           type="text"
@@ -73,6 +73,7 @@ generateResponse(prompt)
         >
           send
         </button>
+
       </div>
       <p v-show="{prompt:true}" class="mx-8 mt-4 text-md prose max-w-none"><span class="font-semibold" >Q:</span> <span class="px-2 py-1 bg-green-100 border border-green-200 rounded-md">{{ question }}</span></p>
       <p v-html="answer" class="blink mx-8 mt-4 text-md prose max-w-none"></p>
