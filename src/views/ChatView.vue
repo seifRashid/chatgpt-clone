@@ -14,14 +14,19 @@ const chat = model.startChat({
   history: [
     {
       role: 'user',
-      parts: [{ text: 'Hello' }],
+      parts: [{ text: 'Who created this app?' }],
     },
     {
       role: 'model',
-      parts: [{ text: 'Great to meet you 😇. What would you like to know?' }],
+      parts: [
+        {
+          text: 'This app was created by Rashid, with assistance from the Gemini API for its AI capabilities. It’s designed to provide a seamless and helpful user experience! Rashid is an aspiring software engineer and has done a bachelor of science in information technology and is very apassionate about softwares in general.He comes from a humble village called Amani that is in Mikindani, Mombasa, Kenya'
+        },
+      ],
     },
   ],
-})
+});
+
 
 const userInput = ref('')
 const conversation = reactive([
@@ -30,12 +35,12 @@ const conversation = reactive([
 const isLoading = ref(false)
 
 const sendMessage = async () => {
-  if (!userInput.value.trim()) return
+  if (!userInput.value.trim()) return;
 
   // Add user's input to the conversation
-  conversation.push({ role: 'user', text: userInput.value })
-  const userMessage = userInput.value
-  userInput.value = ''
+  conversation.push({ role: 'user', text: userInput.value });
+  const userMessage = userInput.value;
+  userInput.value = '';
 
   // Show loading state
   isLoading.value = true
@@ -44,13 +49,13 @@ const sendMessage = async () => {
     const result = await chat.sendMessage(userMessage)
     conversation.push({ role: 'model', text: DOMPurify.sanitize(marked(result.response.text())) })
   } catch (error) {
-    conversation.push({ role: 'model', text: 'Oops! Something went wrong. Please try again.' }, error)
+    conversation.push({ role: 'model', text: 'Oops! Something went wrong🤯. Please try again.' }, error)
   } finally {
     isLoading.value = false
   }
 }
 
-const showAlert= async ()=> {
+const supriseMe = async ()=> {
   // userInput.value = 'suprise me'
   try {
     const result = await chat.sendMessage('provide me with a short suprise for this user')
@@ -71,7 +76,7 @@ const showAlert= async ()=> {
     <div
     class="w-full max-w-2xl bg-white rounded-lg shadow-lg p-4 space-y-4 overflow-y-auto overflow-x-auto"
     >
-    <button class="text-blue-800 bg-blue-200 p-1 rounded-md font-semibold shadow-sm hover:bg-blue-300" @click="showAlert" >Suprise me✨</button>
+    <button class="text-blue-800 bg-blue-200 p-1 rounded-md font-semibold shadow-sm hover:bg-blue-300" @click="supriseMe" >Suprise me✨</button>
       <template v-for="(message, index) in conversation" :key="index">
         <div
           v-if="message.role === 'user'"
@@ -123,3 +128,4 @@ const showAlert= async ()=> {
   animation: fade-in 0.3s ease-out;
 }
 </style>
+"
