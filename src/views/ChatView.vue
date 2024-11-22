@@ -1,6 +1,9 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { marked } from 'marked';
+import DOMPurify from "dompurify";
+
 
 const apiKey = import.meta.env.VITE_GOOGLE_AI_API_KEY
 const genAI = new GoogleGenerativeAI(apiKey)
@@ -38,7 +41,7 @@ const sendMessage = async () => {
 
   try {
     const result = await chat.sendMessage(userMessage)
-    conversation.push({ role: 'model', text: result.response.text() })
+    conversation.push({ role: 'model', text: DOMPurify.sanitize(marked(result.response.text())) })
   } catch (error) {
     conversation.push({ role: 'model', text: 'Oops! Something went wrong. Please try again.' }, error)
   } finally {
@@ -48,30 +51,31 @@ const sendMessage = async () => {
 </script>
 
 <template>
-  <main class="bg-gray-100 min-h-screen flex flex-col items-center p-4">
+  <main class="bg-gray-100 min-h-screen flex flex-col items-center justify-between p-4">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">AI Chat Assistant</h1>
 
     <div
-      class="w-full max-w-2xl bg-white rounded-lg shadow-lg p-4 space-y-4 overflow-y-auto h-[60vh]"
+      class="w-full max-w-2xl bg-white rounded-lg shadow-lg p-4 space-y-4 overflow-y-auto"
     >
       <template v-for="(message, index) in conversation" :key="index">
         <div
           v-if="message.role === 'user'"
-          class="bg-blue-100 text-blue-800 p-3 rounded-lg self-end w-fit animate-fade-in"
+          class="bg-blue-100 text-blue-800 p-3 rounded-lg self-end w-fit animate-fade-in prose max-w-none"
         >
           {{ message.text }}
         </div>
         <div
           v-else
-          class="bg-gray-100 text-gray-800 p-3 rounded-lg self-start w-fit animate-fade-in"
+          class="bg-gray-100 text-gray-800 p-3 rounded-lg self-start w-fit animate-fade-in prose max-w-none"
+          v-html="message.text"
         >
-          {{ message.text }}
+
         </div>
       </template>
       <div v-if="isLoading" class="text-gray-500 italic animate-pulse">Thinking...</div>
     </div>
 
-    <div class="w-full max-w-2xl mt-4 flex space-x-4">
+    <div class="w-full max-w-2xl mt-4 flex space-x-4 sticky bottom-0">
       <input
         v-model="userInput"
         type="text"
