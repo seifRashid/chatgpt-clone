@@ -7,7 +7,7 @@
   <main>
     <div class="flex items-center justify-center">
       <div class="max-w-sm w-full h-screen bg-gray-200">
-        <div class="flex flex-col h-screen bg-[url(/public/images/raining.jpg)] bg-cover bg-center">
+        <div class="flex flex-col w-full h-screen bg-[url(/public/images/sunny.jpg)] bg-cover bg-center">
           <div class="p-4">
             <input
             type="text"
@@ -24,7 +24,7 @@
 <style scoped >
 .round {
   border-radius:0px 24px 0px 24px;
-  box-shadow:1px 1px 20px rgba(0, 0, 0, 0.678);
+  box-shadow:0px 1px 2px rgba(0, 0, 0, 0.678);
   transition: border-radius 1s;
 }
 
